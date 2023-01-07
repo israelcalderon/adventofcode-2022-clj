@@ -2,7 +2,7 @@
   (:require [clojure.string :as str]))
 
 (defn get-calories! []
-  (-> "input"
+  (-> "input-day1"
       slurp
       (clojure.string/split #"\n")))
 

@@ -1,6 +1,5 @@
 (ns advent.core)
 
-(defn foo
-  "I don't do a whole lot."
-  [x]
-  (println x "Hello, World!"))
+(defn get-raw-input!
+  [file-name]
+  (-> file-name slurp (clojure.string/split #"\n")))

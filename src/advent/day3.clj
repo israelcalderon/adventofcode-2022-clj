@@ -25,11 +25,12 @@
   (let [common-items (clojure.set/intersection
                       (set (:left-compartment rucksack))
                       (set (:right-compartment rucksack)))]
-    (reduce (fn [sum item] (+ sum (* 2 (get priority item)))) 0 common-items)))
+    (reduce (fn [sum item] (+ sum (get priority item))) 0 common-items)))
 
 (defn rucksacks-total-priority [rucksacks]
-  (-> #(map get-priority-rucksack rucksacks)
-      #(reduce + %)))
+  (->> rucksacks
+       (map get-priority-rucksack)
+       (reduce +)))
 
 (-> "input-day3"
     core/get-raw-input!

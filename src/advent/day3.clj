@@ -8,31 +8,23 @@
 
 (def priority (zipmap items (range 1 (+ (count items) 1))))
 
-(defn organize-rucksack
-  [raw-items]
-  (let [rucksack-elements (count raw-items)
-        compartment-size (/ rucksack-elements 2)
-        left-compartment (take compartment-size raw-items)
-        right-compartment (nthrest raw-items compartment-size)]
-    {:left-compartment left-compartment
-     :right-compartment right-compartment}))
-
-(defn get-rucksacks [raw-input]
-  (map organize-rucksack raw-input))
-
-(defn get-priority-rucksack
+(defn split-rucksack-in-compartments
   [rucksack]
-  (let [common-items (clojure.set/intersection
-                      (set (:left-compartment rucksack))
-                      (set (:right-compartment rucksack)))]
-    (reduce (fn [sum item] (+ sum (get priority item))) 0 common-items)))
+  (let [rucksack-elements (count rucksack)
+        compartment-size (/ rucksack-elements 2)
+        left-compartment (take compartment-size rucksack)
+        right-compartment (nthrest rucksack compartment-size)]
+    [left-compartment right-compartment]))
 
-(defn rucksacks-total-priority [rucksacks]
-  (->> rucksacks
-       (map get-priority-rucksack)
-       (reduce +)))
+(defn rucksacks-priority
+  "Returns the estimated priority for the rucksacks provided"
+  [& rucksack-chunk]
+  (let [common-item (first
+                     (apply clojure.set/intersection
+                            (map set rucksack-chunk)))]
+    (get priority common-item)))
 
-(-> "input-day3"
-    core/get-raw-input!
-    get-rucksacks
-    rucksacks-total-priority)
+(->> (core/get-raw-input! "input-day3")
+     (map split-rucksack-in-compartments)
+     (map #(apply rucksacks-priority %))
+     (reduce +))

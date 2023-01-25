@@ -24,7 +24,14 @@
                             (map set rucksack-chunk)))]
     (get priority common-item)))
 
+; part 1
 (->> (core/get-raw-input! "input-day3")
      (map split-rucksack-in-compartments)
+     (map #(apply rucksacks-priority %))
+     (reduce +))
+
+; part 2
+(->> (core/get-raw-input! "input-day3")
+     (partition 3)
      (map #(apply rucksacks-priority %))
      (reduce +))
